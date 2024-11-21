@@ -17,6 +17,7 @@ body {
     color: #464646;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    min-height: 100vh;
     height: 100%;
 }
 

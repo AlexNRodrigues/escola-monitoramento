@@ -46,6 +46,18 @@ class AlunoModel
         }
     }
 
+    public static function GetAlunoByRa($ra)
+    {
+        $sql = "SELECT * FROM alunos WHERE ra = :ra";
+        $query = Database::GetInstance()->prepare($sql);
+        $query->bindvalue(":ra", $ra);
+        $query->execute();
+        if ($query->rowCount() > 0) {
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        return false;
+    }
+
     public static function GetProvasFinalizadas()
     {
         $sql = "SELECT * FROM gabarito_alunos ORDER BY data_aluno DESC ";
@@ -135,7 +147,7 @@ class AlunoModel
     {
         $sql = "SELECT * FROM gabarito_alunos WHERE id_prova = :id";
         $query = Database::GetInstance()->prepare($sql);
-        $query->bindValue(":ID", $id);
+        $query->bindValue(":id", $id);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }

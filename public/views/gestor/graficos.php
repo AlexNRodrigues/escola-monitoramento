@@ -217,11 +217,13 @@
         </div>
         <?php } ?>
 
-        <div class="area-dados-graficos">
-            <span>
-            <?= $data["quantidade_dados"]?> PROVA(S) CONTABILIZADAS
-            </span>
-        </div>
+        <?php if(isset($data["quantidade_dados"])): ?>
+            <div class="area-dados-graficos">
+                <span>
+                    <?= $data["quantidade_dados"] . "PROVA(S) CONTABILIZADAS" ?>
+                </span>
+            </div>
+        <?php endif; ?>
 <br><br><br>
 <br>
 </main>

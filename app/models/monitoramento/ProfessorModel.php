@@ -332,4 +332,77 @@ class ProfessorModel
 
         return $query;
     }
+
+    public static function getAlunosByTurma($turma) {
+
+        $sql = "SELECT ra, nome, turma FROM alunos WHERE turma LIKE :turma ORDER BY nome ASC";
+
+        $turmaParam = '%' . $turma . '%';
+
+        $query = Database::GetInstance()->prepare($sql);
+        $query->bindValue(":turma", $turmaParam);
+        $query->execute();
+        
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getAlunosByProva($prova) {
+        $sql = 'SELECT ra, aluno FROM gabarito_alunos WHERE id_prova = :prova';
+
+        $query = Database::GetInstance()->prepare($sql);
+        $query->bindValue(":prova", $prova);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getProvaByRa($prova, $ra)
+    {
+        $sql = "SELECT * FROM gabarito_alunos WHERE id_prova = :id AND ra = :ra";
+        $query = Database::GetInstance()->prepare($sql);
+        $query->bindValue(":id", $prova);
+        $query->bindValue(":ra", $ra);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function inserir_gabarito_aluno($dados)
+    {
+        $sql = "INSERT INTO gabarito_alunos
+            (aluno, ra, turma, id_prova, nome_professor, descritores, disciplina, nome_prova, pontos_prova, QNT_perguntas, data_aluno, acertos, pontos_aluno, pontos_aluno_quebrado, perguntas_certas, descritores_certos, descritores_errados, perguntas_erradas, perguntas_respostas, porcentagem, turno, serie, status)
+            VALUES (:ALUNO, :RA, :TURMA, :ID_PROVA, :NOME_PROFESSOR, :DESCRITORES, :DISCIPLINA, :NOME_PROVA, :PONTOS_PROVA, :QNT_PERGUNTAS, :DATA_ALUNO, :ACERTOS, :PONTOS_ALUNO, :PNTQ, :PERGUNTAS_CERTAS, :DESCRITORES_CERTOS, :DESCRITORES_ERRADOS, :PERG_ERRADAS, :PERG_RESP, :PORC, :TURNO, :SER, :STATUS)";
+
+        $query = Database::GetInstance()->prepare($sql);
+
+        $params = [
+            ":ALUNO" => $dados["aluno"],
+            ":RA" => $dados["ra"],
+            ":TURMA" => $dados["turma"],
+            ":TURNO" => $dados["turno"],
+            ":ID_PROVA" => $dados["id_prova"],
+            ":SER" => $dados["serie"],
+            ":NOME_PROFESSOR" => $dados["nome_professor"],
+            ":DESCRITORES" => $dados["descritores"],
+            ":DISCIPLINA" => $dados["disciplina"],
+            ":NOME_PROVA" => $dados["nome_prova"],
+            ":PONTOS_PROVA" => $dados["pontos_prova"],
+            ":QNT_PERGUNTAS" => $dados["QNT_perguntas"],
+            ":DATA_ALUNO" => $dados["data_aluno"],
+            ":ACERTOS" => $dados["acertos"],
+            ":PORC" => $dados["porcentagem"],
+            ":PONTOS_ALUNO" => $dados["pontos_aluno"],
+            ":PNTQ" => $dados["pontos_aluno_quebrado"],
+            ":PERG_RESP" => $dados["perguntas_respostas"],
+            ":PERGUNTAS_CERTAS" => $dados["perguntas_certas"],
+            ":PERG_ERRADAS" => $dados["perguntas_erradas"],
+            ":DESCRITORES_CERTOS" => $dados["descritores_certos"],
+            ":DESCRITORES_ERRADOS" => $dados["descritores_errados"],
+            ":STATUS" => $dados["status"],
+        ];
+
+        foreach ($params as $key => $value) {
+            $query->bindValue($key, $value);
+        }
+
+        return $query->execute();
+    }
 }

@@ -65,22 +65,21 @@ class AlunoController
                 $provas_aluno = null;
             }
 
+            $provas_aluno_feitas = [];
+
             if ($provas_feitas != null) {
                 foreach ($provas_feitas as $prova) {
                     if ($prova["ra"] == $_SESSION["ra"]) {
                         $provas_aluno_feitas[] = $prova;
                     }
                 }
-            } else {
-                $provas_aluno_feitas = null;
             }
-
 
             // echo "<pre>";
             // print_r($provas_aluno);
             // echo "</pre>";
 
-            // dd($provas_aluno_feitas);
+            // dump($provas_aluno_feitas);
 
             // dd(ADModel::GetPeriodos());
 
@@ -320,7 +319,7 @@ class AlunoController
     }
 */
     
-public static function gabarito_aluno()
+    public static function gabarito_aluno()
     {
         if ($_SESSION["ALUNO"]) {
 
@@ -476,6 +475,7 @@ public static function gabarito_aluno()
                 "descritores_errados" => $descritores_errados,
                 "status" => "Fez a 1º Prova",
             ];
+
 
             if (AlunoModel::Inserir_dados_prova_1_prova($dados)) {
                 AlunoModel::Inserir_dados_prova($dados, "Fez a 1º Prova");

@@ -1,120 +1,147 @@
+<?php extract($data); ?>
+
 <main class="main-home-professor">
-    <center>
-        <h1 class="titulo-NSL">NSL - SISTEMA DE MONITORAMENTO</h1>
-        <h1>EDITAR GABARITO</h1>
-        <h2><?=$data["nome"]?></h2>
+    <h1 class="titulo-NSL">NSL - SISTEMA DE MONITORAMENTO</h1>
+    <h1>EDITAR GABARITO</h1>
+    <h2><?= $nome ?></h2>
 
-        <div class="">
-            <form action="atualizar_gabarito" method="post">
+    <div class="">
+        <form action="atualizar_gabarito" method="post">
 
-                
+            <div class="valor_pontos_editar">
+                <h2>Valor</h2>
+                <input type="text" name="valor_prova" value="<?= $valor ?>">
+            </div>
 
-                <div class="valor_pontos_editar">
-                    <h2>Valor</h2>
-                    <input type="text" name="valor_prova" value="<?=$data['valor'];?>">
-                </div>
-                <br><br>
+            <br><br>
 
-                <div class="professor-form-section-wrapper">
-                <center>
-                    <h3 class="form-section-header">METODO AVALIATIVO:</h3>
-                    <div class="professor-form-group">
-                        <div>
-                            <input type="radio" <?= $data["metodo"] == "prova" ? "checked" : "" ?> required id="metodo_prova" name="metodo" value="prova"
-                                class="custom-radio-button">
-                            <label style="width: 220px;" for="metodo_prova">PROVA AVALIATIVA</label>
-                        </div>
-                        <div>
-                            <input type="radio"  <?= $data["metodo"] == "atividade" ? "checked" : "" ?>  required name="metodo" id="metodo_att" value="atividade"
-                                class="custom-radio-button">
-                            <label style="width: 220px;" for="metodo_att">ATIVIDADE DE REVISÃO</label>
-                        </div>
-                        <div>
-                            <input type="radio"  <?= $data["metodo"] == "ama" ? "checked" : "" ?>  required name="metodo" id="metodo_ama" value="ama"
-                                class="custom-radio-button">
-                            <label style="width: 220px;" for="metodo_ama">AMA</label>
-                        </div>
+            <div class="professor-form-section-wrapper">
+                <h3 class="form-section-header">METODO AVALIATIVO:</h3>
+                <div class="professor-form-group">
+                    <div>
+                        <input type="radio" <?= $metodo == "prova" ? "checked" : "" ?> required id="metodo_prova" name="metodo" value="prova"
+                            class="custom-radio-button">
+                        <label style="width: 220px;" for="metodo_prova">PROVA AVALIATIVA</label>
                     </div>
-                </center>
+                    <div>
+                        <input type="radio"  <?= $metodo == "atividade" ? "checked" : "" ?>  required name="metodo" id="metodo_att" value="atividade"
+                            class="custom-radio-button">
+                        <label style="width: 220px;" for="metodo_att">ATIVIDADE DE REVISÃO</label>
+                    </div>
+                    <div>
+                        <input type="radio"  <?= $metodo == "ama" ? "checked" : "" ?>  required name="metodo" id="metodo_ama" value="ama"
+                            class="custom-radio-button">
+                        <label style="width: 220px;" for="metodo_ama">AMA</label>
+                    </div>
+                </div>
             </div>
  
-                <?php if ($data["descritores"] != null) {?>
-                <center>
-                    <h3>Nos descritores, Não esqueça de colocar a "_" e o <br> prefixo da materia, Exemplo : "D027_M"
+            <?php if (!empty($descritores)): ?>
+                <div>
+                    <h3>
+                        Nos descritores, Não esqueça de colocar a "_" e o <br> prefixo da materia, Exemplo : "D027_M"
                     </h3>
-                </center>
-                <center>
                     <h4>Não coloque o descritor sem o prefixo </h4>
-                </center>
-                <?php }?>
+               </div>
+            <?php endif; ?>
 
-                <input type="hidden" name="numero_perguntas" value="<?=$data['perguntas'];?>">
-                <input type="hidden" name="descritor"
-                    value="<?=isset($data['descritores']) ? 'sim' : 'não';?>">
+            <input type="hidden" name="numero_perguntas" value="<?= $perguntas ?>">
+            <input type="hidden" name="descritor" value="<?= !empty($descritores) ? 'sim' : 'não' ?>">
 
-                <table class="tabela-alternativas-escolher">
-                    <?php
-$contador = 1;
-while ($contador <= $data["perguntas"]) {
-    $resposta = explode(",", base64_decode($data["gabarito"][$contador - 1]))[1];
-    ?>
+            <table class="tabela-alternativas-escolher">
+
+                <?php $gabarito = array_map('base64_decode', $gabarito); ?>
+
+                <?php for ($i=1; $i <= $perguntas; $i++): ?>
+                    <?php $resposta = explode(",", $gabarito[$i - 1])[1]; ?>
+
                     <tr>
                         <td>
-                            <span><?=$contador?></span>
+                            <span><?=$i ?></span>
                         </td>
-                        <?php if ($data["descritores"] != null) {?>
-                        <td>
-                            <div style="display: block;" class="campos-selecionar-descritores">
-                                <input type="text" class="searchInput" required data-index="<?=$contador?>"
-                                    name="DESCRITOR_<?="{$contador}"?>" value="<?php if ($contador < 10) {
-        echo substr($data['descritores'][$contador - 1], 2);
-    } else if ($contador >= 10 && $contador < 100) {
-        echo substr($data['descritores'][$contador - 1], 3);
-    } else {
-        echo substr($data['descritores'][$contador - 1], 4);
-    }?>" placeholder="DESCRITOR">
-                                <div style="display: block;" class="descritoresContainer"
-                                    data-index="<?=$contador?>"></div>
-                            </div>
-                        </td>
-                        <?php }?>
 
-                        <?php  foreach($data["alternativas"] as $a){?>  
-                            
+                        <?php if(!empty($descritores)): ?>
                             <td>
-                            <div  class="Ds" ><input type="radio" name="<?="{$contador}"?>" required
-                                    value="<?="{$contador},{$a}"?>" id="<?="{$contador},{$a}"?>"
-                                    <?=$resposta == $a ? 'checked' : '';?>><label
-                                    for="<?="{$contador},{$a}"?>"><?= $a?></label></div>
-                        </td>
+                                <?php
+                                    $descritor = explode(",", $descritores[$i - 1])[1];
+                                    echo $descritor;
+                                ?>
+                                <div style="display: block;" class="campos-selecionar-descritores">
+                                    <input type="text"
+                                           class="searchInput"
+                                           data-index="<?= $i ?>"
+                                           name="DESCRITOR_<?= $i ?>"
+                                           value="<?= $descritor ?>"
+                                           placeholder="DESCRITOR"
+                                    />
+                                    <div style="display: block;" class="descritoresContainer" data-index="<?= $i ?>"></div>
+                                </div>
+                            </td>
+                        <?php endif; ?>
 
-                        <?php } ?>
-
-                      
-                       
+                        <?php foreach($alternativas as $alternativa): ?>
+                            <td>
+                                <div class="Ds" >
+                                    <input type="radio"
+                                           name="<?="{$i}"?>"
+                                           required
+                                           id="<?="{$i},{$alternativa}"?>"
+                                           value="<?="{$i},{$alternativa}"?>"
+                                            <?= $resposta === $alternativa ? 'checked' : '' ?>
+                                    >
+                                    <label for="<?="{$i},{$alternativa}"?>"><?= $alternativa?></label>
+                                </div>
+                            </td>
+                        <?php endforeach; ?>
 
                         <td style="padding: 13px;border-top: solid 1px white; border-bottom:  solid 1px white;"></td>
 
                         <td>
-    <div class="label-anular">
-        <input type="radio" id="anular_<?php echo "{$contador}" ?>" name="<?php echo "{$contador}" ?>" required value="<?php echo "{$contador},null" ?>" <?php echo $resposta == 'null' ? 'checked' : ''; ?>>
-        <label for="anular_<?php echo "{$contador}" ?>">Anular Questão</label>
-    </div>
-</td>
+                            <div class="label-anular">
+                                <input type="radio"
+                                       id="anular_<?= $i ?>"
+                                       name="<?= $i ?>"
+                                       required
+                                       value="<?= "{$i},null" ?>"
+                                        <?= $resposta == 'null' ? 'checked' : '' ?>
+                                />
+                                <label for="anular_<?= $i ?>">Anular Questão</label>
+                            </div>
+                        </td>
+
                     </tr>
-                    <?php
-$contador++;
-}?>
-                </table>
-                <br>
+                <?php endfor; ?>
 
-                <h3>Ao selecionar a opção “anular questão” , a questão<br> será anulada e todos os alunos que escolheram
-                    <br>qualquer alternativa para essa questão receberão pontuação.</h3>
+            </table>
+            <br>
 
-                <br><br><br>
-                <input type="submit" value="Atualizar gabarito" class="botao-form-enviar">
-    </center>
-    </form>
+            <h3>
+                Ao selecionar a opção “anular questão” , a questão<br>
+                será anulada e todos os alunos que escolheram <br>
+                qualquer alternativa para essa questão receberão pontuação.
+            </h3>
+
+            <br><br><br>
+            <input type="submit" value="Atualizar gabarito" class="botao-form-enviar">
+        </form>
+
+        <?php if(!$he_simulado): ?>
+            <form action="download_gabarito" class="download-gabarito" method="post">
+                <div class="form-group">
+                    <label for="orientacoes">Orientações</label>
+                    <div id="quill-container"></div>
+                    <textarea name="orientacoes" id="orientacoes" cols="30" rows="10" required maxlength="600"></textarea>
+                </div>
+
+                <button type="submit" class="botao-form-enviar"  id="download-gabarito">
+                    Gabarito
+                </button>
+            </form>
+        <?php endif; ?>
+
     </div>
-    <br><br><br>
+
 </main>
+
+<script src="./public/assents/js/quill_config.js"></script>
+

@@ -11,7 +11,7 @@ use DateTime;
 
 class PFAcontroller
 {
-   public static function validar_login_pfa(){
+    public static function validar_login_pfa(){
         $user = $_POST["user"];
         $senha = $_POST["senha"];
 

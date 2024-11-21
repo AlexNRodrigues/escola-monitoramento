@@ -3,11 +3,11 @@ rotas:
   pfa_provas:                     app\controllers\monitoramento\PFAcontroller
   pfa_prova:                      app\controllers\monitoramento\PFAcontroller
   validar_login_pfa:              app\controllers\monitoramento\PFAcontroller
-  login_adm_verifica:             app\controllers\monitoramento\ADMcontroller
-  adm_home:                       app\controllers\monitoramento\ADMcontroller
-  adicionar_aluno:                app\controllers\monitoramento\ADMcontroller
-  editar_dados_aluno:             app\controllers\monitoramento\ADMcontroller
-  adm_info:                       app\controllers\monitoramento\ADMcontroller
+  login_adm_verifica:             app\controllers\monitoramento\AdmController
+  adm_home:                       app\controllers\monitoramento\AdmController
+  adicionar_aluno:                app\controllers\monitoramento\AdmController
+  editar_dados_aluno:             app\controllers\monitoramento\AdmController
+  adm_info:                       app\controllers\monitoramento\AdmController
   home:                           app\controllers\monitoramento\MainController
   adm:                            app\controllers\monitoramento\MainController
   ADM:                            app\controllers\monitoramento\MainController
@@ -47,3 +47,12 @@ rotas:
   editar_gabarito_recuperacao:    app\controllers\monitoramento\ProfessorController
   atualizar_gabarito_rec:         app\controllers\monitoramento\ProfessorController
   professor_security:             app\controllers\monitoramento\ProfessorController
+  download_gabarito:       app\controllers\monitoramento\ProfessorController
+  lancar_gabarito:         app\controllers\monitoramento\ProfessorController
+  capturar_gabarito:       app\controllers\monitoramento\ProfessorController
+  salvar_gabarito:         app\controllers\monitoramento\ProfessorController
+  simulados:               app\controllers\monitoramento\GestorController
+  criar_simulado:          app\controllers\monitoramento\GestorController
+  editar_simulado:         app\controllers\monitoramento\GestorController
+  excluir_simulado:        app\controllers\monitoramento\GestorController
+  download_multi_gabarito: app\controllers\monitoramento\GestorController

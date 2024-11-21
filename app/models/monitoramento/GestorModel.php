@@ -96,4 +96,50 @@ class GestorModel{
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function GetNomeDisciplinas(){
+        $query = "SELECT DISTINCT disciplina FROM gabarito_professores ORDER BY disciplina ASC";
+        
+        $stmt = Database::GetInstance()->prepare($query);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+    
+    public static function GetProvas($condicao = null) {
+        $query = "SELECT * FROM gabarito_professores";
+
+        $params = [];
+
+        if ($condicao) {
+            $query .= " WHERE 1 = 1";
+
+            if (!empty($condicao['disciplina'])) {
+                $query .= " AND disciplina = :disciplina";
+                $params[':disciplina'] = $condicao['disciplina'];
+            }
+            if (!empty($condicao['turma'])) {
+                $query .= " AND turmas = :turma";
+                $params[':turma'] = $condicao['turma'];
+            }
+            if (!empty($condicao['professor'])) {
+                $query .= " AND nome_professor = :professor";
+                $params[':professor'] = $condicao['professor'];
+            }
+            if (!empty($condicao['data_inicio']) && !empty($condicao['data_fim'])) {
+                $query .= " AND data_prova BETWEEN :data_inicio AND :data_fim";
+                $params[':data_inicio'] = $condicao['data_inicio'];
+                $params[':data_fim'] = $condicao['data_fim'];
+            }
+        }
+
+        $query .= " ORDER BY data_prova DESC";
+
+        $stmt = Database::GetInstance()->prepare($query);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        $stmt->execute();
+        // $stmt->debugDumpParams();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

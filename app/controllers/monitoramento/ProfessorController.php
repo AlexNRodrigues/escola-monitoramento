@@ -6,7 +6,9 @@ use app\controllers\monitoramento\MainController;
 use app\models\monitoramento\ADModel;
 use app\models\monitoramento\AlunoModel;
 use app\models\monitoramento\ProfessorModel;
+use app\models\monitoramento\SimuladosModel;
 use DateTime;
+use Dompdf\Dompdf;
 
 class ProfessorController
 {
@@ -181,59 +183,88 @@ class ProfessorController
 
     public static function ver_provas()
     {
-
-        if ($_SESSION["PROFESSOR"]) {
-            $provas_professores = AlunoModel::GetProvas();
-            $provas_alunos = AlunoModel::GetProvasFinalizadas();
-            $provas = [];
-            $_SESSION["PAG_VOLTAR"] = "professor_home";
-
-            if ($provas_professores != null) {
-                foreach ($provas_professores as $professor) {
-                    if ($professor["nome_professor"] == $_SESSION["nome_professor"]) {
-                        $provas[] = $professor;
-                    }
-                }
-
-                foreach (ADModel::GetPeriodos() as $periodo) {
-                    $nome_periodo = $periodo['nome'];
-                    $data_inicial = $periodo['data_inicial'];
-                    $data_final = $periodo['data_final'];
-    
-                    $provas_organizadas[$nome_periodo] = [];
-    
-                    foreach ($provas as $prova) {
-                        $data_prova = $prova['data_prova'];
-    
-                        if ($data_prova >= $data_inicial && $data_prova <= $data_final) {
-                            $provas_organizadas[$nome_periodo][] = $prova;
-                        }
-                    }
-                }
-
-                $dados = [
-                    "provas" => $provas_organizadas,
-                    "provas_alunos" => $provas_alunos,
-                ];
-
-                foreach ($dados['provas'] as $periodo => $provass) {
-                    usort($provass, function ($a, $b) {
-                        return strtotime($b['data_prova']) - strtotime($a['data_prova']);
-                    });
-                    $dados['provas'][$periodo] = $provass;
-                }
-
-            }
-
-            if ($provas == null || $provas_professores == null) {
-                $dados = null;
-            }
-
-            MainController::Templates("public/views/professor/provas.php", "PROFESSOR", $dados);
-
-        } else {
+        if (!$_SESSION["PROFESSOR"]) {
             header("location: adm");
         }
+
+        $provas_professores = AlunoModel::GetProvas();
+        $provas_alunos = AlunoModel::GetProvasFinalizadas();
+        $provas = [];
+        $_SESSION["PAG_VOLTAR"] = "professor_home";
+
+        if ($provas_professores != null) {
+
+            foreach ($provas_professores as $professor) {
+                if ($professor["nome_professor"] == $_SESSION["nome_professor"]) {
+                    $provas[] = $professor;
+                }
+            }
+
+            $provas_organizadas = [];
+
+            foreach (ADModel::GetPeriodos() as $periodo) {
+                $nome_periodo = $periodo['nome'];
+                $data_inicial = $periodo['data_inicial'];
+                $data_final = $periodo['data_final'];
+
+                $provas_organizadas[$nome_periodo] = [];
+
+                foreach ($provas as $index => $prova) {
+                    $data_prova = $prova['data_prova'];
+
+                    if ($data_prova >= $data_inicial && $data_prova <= $data_final) {
+                        $provas_organizadas[$nome_periodo][$index] = $prova;
+                        $provas_organizadas[$nome_periodo][$index]['total_alunos'] = count(AlunoModel::GetProvasbyID($prova['id']));
+                    }
+                }
+            }
+
+            $dados = [
+                "provas" => $provas_organizadas,
+            ];
+        }
+//            if ($provas_professores != null) {
+//                foreach ($provas_professores as $professor) {
+//                    if ($professor["nome_professor"] == $_SESSION["nome_professor"]) {
+//                        $provas[] = $professor;
+//                    }
+//                }
+//
+//                foreach (ADModel::GetPeriodos() as $periodo) {
+//                    $nome_periodo = $periodo['nome'];
+//                    $data_inicial = $periodo['data_inicial'];
+//                    $data_final = $periodo['data_final'];
+//
+//                    $provas_organizadas[$nome_periodo] = [];
+//
+//                    foreach ($provas as $prova) {
+//                        $data_prova = $prova['data_prova'];
+//
+//                        if ($data_prova >= $data_inicial && $data_prova <= $data_final) {
+//                            $provas_organizadas[$nome_periodo][] = $prova;
+//                        }
+//                    }
+//                }
+//
+//                $dados = [
+//                    "provas" => $provas_organizadas,
+//                "provas_alunos" => $provas_alunos,
+//            ];
+//
+//            foreach ($dados['provas'] as $periodo => $provass) {
+//                usort($provass, function ($a, $b) {
+//                    return strtotime($b['data_prova']) - strtotime($a['data_prova']);
+//                });
+//                $dados['provas'][$periodo] = $provass;
+//            }
+//
+//        }
+
+        if ($provas == null || $provas_professores == null) {
+            $dados = null;
+        }
+
+        MainController::Templates("public/views/professor/provas.php", "PROFESSOR", $dados);
     }
     public static function prova()
     {
@@ -1205,13 +1236,13 @@ class ProfessorController
 
             $gabarito = explode(";", $prova_professor["gabarito"]);
 
-            if ($prova_professor["descritores"] == null) {
-                $descritores = null;
-            } else {
-                $descritores = explode(";", $prova_professor["descritores"]);
-            }
+            $descritores = $prova_professor["descritores"] != null
+                ? explode(";", $prova_professor["descritores"])
+                : [];
 
-            $dados = [
+            $he_simulado = SimuladosModel::getSimuladoProva($prova_professor['id']);
+
+            MainController::Templates("public/views/professor/editar_prova.php", "PROFESSOR", [
                 "gabarito" => $gabarito,
                 "descritores" => $descritores,
                 "valor" => $valor,               
@@ -1219,13 +1250,8 @@ class ProfessorController
                 "perguntas" => $perguntas,
                 "nome" => $prova_professor["nome_prova"],
                 "metodo" => $prova_professor["metodo"],
-            ];
-
-            // echo "<pre>";
-            // print_r($dados);
-            // echo "</pre>";
-
-            MainController::Templates("public/views/professor/editar_prova.php", "PROFESSOR", $dados);
+                'he_simulado' => $he_simulado,
+            ]);
         } else {
             header("location: adm");
         }
@@ -1506,6 +1532,241 @@ class ProfessorController
         $query = ADModel::adicionarLogsProfessor($dados_logs);
 
         return $query;
+    }
+
+    public static function download_gabarito()
+    {   
+        if (!$_SESSION["PROFESSOR"]) {
+            header("location: adm");
+        }
+        
+        $idProva = $_SESSION["ID_PROVA_EDITAR"];
+
+        if (!$idProva) {
+            header('Location: ' . $_SESSION['PAG_VOLTAR']);
+            exit;
+        }
+
+        $prova = ProfessorModel::GetProvabyID($idProva);
+        $orientacoes = $_POST['orientacoes'] ?? '';
+
+        ob_start();
+
+        include "public/views/professor/download_gabarito.php";
+
+        $html_content = ob_get_contents();
+        ob_end_clean();
+
+        $test = true;
+        $test = false;
+
+        if ($test) {
+            echo $html_content;
+        } else {
+
+            try {
+                $options = [
+                    'enable_remote' => true,
+                    'defaultFont' => 'Arial',
+                    'enable_php' => true,
+                ];
+
+                $dompdf = new Dompdf($options);
+                $dompdf->loadHtml($html_content);
+                $dompdf->setPaper('A4', 'portrait');
+                $dompdf->render();
+
+                $dompdf->stream("gabarito.pdf", [
+                    "Attachment" => false
+                ]);
+
+            } catch (\Exception $exception) {
+                dd($exception->getMessage());
+            }
+        }
+
+        exit;
+    }
+
+    public static function lancar_gabarito() {
+
+        if (!$_SESSION["PROFESSOR"]) {
+            header("location: adm");
+        }
+        
+        if (!isset($_GET['query_array']['prova_id'])) {
+            header("location: {$_SESSION['PAG_VOLTAR']}");
+        }
+
+        $id_prova = $_GET['query_array']['prova_id'];
+        $prova = ProfessorModel::GetProvabyID($id_prova);
+
+        if ($_SESSION['nome_professor'] != $prova['nome_professor']) {
+            $_SESSION["PopUp_Prova_outro_professor"] = true;
+            header("location: {$_SESSION['PAG_VOLTAR']}");
+            exit;
+        }
+        
+        $turma = $prova['turmas'];
+        $alunos = ProfessorModel::getAlunosByTurma($turma);
+
+        $provas_finalizadas = ProfessorModel::getAlunosByProva($id_prova);
+        $respostas_lancadas = !empty($provas_finalizadas) ? array_column($provas_finalizadas, 'aluno', 'ra') : [];
+
+        $simulado = SimuladosModel::getSimulados(['prova_simulado' => $id_prova]);
+
+        MainController::Templates("public/views/professor/lancar_gabarito.php", "PROFESSOR", [
+            'prova'  => $prova,
+            'alunos' => $alunos,
+            'respotas_lancadas' => $respostas_lancadas,
+            'simulado' => reset($simulado),
+        ]);
+    }
+
+    public static function capturar_gabarito()
+    {
+        if (!$_SESSION["PROFESSOR"]) {
+            header("location: adm");
+        }
+
+        if (!isset($_GET['query_array']['prova_id'], $_GET['query_array']['ra_aluno'])) {
+            header("location: {$_SESSION['PAG_VOLTAR']}");
+        }
+
+        $id_prova = $_GET['query_array']['prova_id'];
+        $prova = ProfessorModel::GetProvabyID($id_prova);
+        $he_simulado = SimuladosModel::getSimuladoProva($id_prova);
+
+        $provas_do_simulado = $he_simulado
+            ? SimuladosModel::getProvasSimulado($he_simulado['id'])
+            : [];
+
+        $ra_aluno = $_GET['query_array']['ra_aluno'];
+        $aluno = AlunoModel::GetAlunoByRa($ra_aluno);
+        $ja_respondido = ProfessorModel::getProvaByRa($id_prova, $ra_aluno);
+
+        $simulado = SimuladosModel::getSimulados(['prova_simulado' => $id_prova]);
+
+        MainController::Templates("public/views/professor/capturar_gabarito.php", "PROFESSOR", [
+            'prova'  => $prova,
+            'aluno' => $aluno,
+            'ja_respondido' => $ja_respondido[0] ?? [],
+            'he_simulado' => $he_simulado ?? [],
+            'provas_do_simulado' => $provas_do_simulado,
+            'simulado' => reset($simulado),
+        ]);
+    }
+
+    public static function salvar_gabarito() {
+        if (!$_SESSION["PROFESSOR"]) {
+            header("location: adm");
+        }
+
+        $prova_redirect = '';
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $dados = $_POST;
+
+            $prova_redirect = $dados['prova_id'];
+            $aluno = AlunoModel::GetAlunoByRa($dados['ra_aluno']);
+
+            $resultado = false;
+
+            if(!empty($dados['simulado_id'])) {
+                $provas = SimuladosModel::getProvasSimulado($dados['simulado_id']);
+
+                foreach ($provas as $idx => $prova) {
+                    $respostas = $dados['prova'][$idx]['perguntas_respostas'] ?? [];
+                    $resultado = self::salvarRespostasAluno($aluno, $prova, $respostas);
+                }
+            } else {
+                $prova = ProfessorModel::GetProvabyID($dados['prova_id']);
+                $respostas = $dados['prova'][0]['perguntas_respostas'] ?? [];
+                $resultado = self::salvarRespostasAluno($aluno, $prova, $respostas);
+            }
+
+            if (!$resultado) {
+                $_SESSION["PopUp_Gabarito_Prova_Erro"] = true;
+            } else {
+                $_SESSION["PopUp_Gabarito_Prova"] = true;
+            }
+        }
+
+        header("location: lancar_gabarito?prova_id={$prova_redirect}");
+        exit;
+    }
+
+    private static function salvarRespostasAluno($aluno, $prova, $respostas)
+    {
+        $id_prova = $prova['gabarito_professor_id'] ?? $prova['id'];
+        $ja_respondido = ProfessorModel::getProvaByRa($id_prova, $aluno['ra'])[0] ?? [];      
+        $gabarito = explode(';', $prova['gabarito']);
+        $descritores = $prova['descritores'] ? explode(';', $prova['descritores']) : [];
+        $respostas_recebida = array_map(function($key, $value) {
+            return "{$key},{$value}";
+        }, array_keys($respostas), $respostas);
+
+        $respostas_corretas = array_intersect($gabarito, $respostas_recebida);
+        $respostas_erradas = array_diff($respostas_recebida, $gabarito);
+
+        $descritores_corretos = array_intersect_key($descritores, $respostas_corretas);
+        $descritores_errados = array_diff_key($descritores, $respostas_corretas);
+
+        $total_questoes = count($gabarito);
+        $total_acertos = count($respostas_corretas);
+        $porcetagem_acerto = ($total_acertos / $total_questoes) * 100;
+        $ponto_questao = $prova['valor'] / $total_questoes;
+
+        $resultado = false;
+        if($ja_respondido) {
+            $update = [
+                'acertos' => $total_acertos,
+                'porcentagem' => $porcetagem_acerto,
+                'turma' => $aluno['turma'],
+                'pontos_aluno' => round($ponto_questao * $total_acertos),
+                'pontos_aluno_quebrado' => ($ponto_questao * $total_acertos),
+                'perguntas_certas' => implode(';', $respostas_corretas),
+                'perguntas_respostas' => implode(';', $respostas),
+                'perguntas_erradas' => implode(';', $respostas_erradas),
+                'descritores' => $prova['descritores'],
+                'descritores_certos' => implode(';', $descritores_errados),
+                'descritores_errados' => implode(';', $descritores_errados),
+                'pontos_prova' => $prova['valor'],
+                'ID' => $ja_respondido['id'],
+                'ID_prova' => $id_prova,
+            ];
+            $resultado = ProfessorModel::atualizar_gabarito_aluno($update);
+        } else {
+            $insert = [
+                'aluno' => $aluno['nome'],
+                'ra' => $aluno['ra'],
+                'turma' => $aluno['turma'],
+                'turno' => $aluno['turno'],
+                'id_prova' => $id_prova,
+                'serie' => str_split($prova['turmas'],1)[0],
+                'nome_professor' => $prova['nome_professor'],
+                'descritores' => $prova['descritores'],
+                'disciplina' => $prova['disciplina'],
+                'nome_prova' => $prova['nome_prova'],
+                'pontos_prova' => $prova['valor'],
+                'QNT_perguntas' => $prova['QNT_perguntas'],
+                'data_aluno' => $prova['data_prova'],
+                'acertos' => $total_acertos,
+                'porcentagem' => $porcetagem_acerto,
+                'pontos_aluno' => round($ponto_questao * $total_acertos),
+                'pontos_aluno_quebrado' => ($ponto_questao * $total_acertos),
+                'perguntas_respostas' => implode(';', $respostas),
+                'perguntas_certas' => implode(';', $respostas_corretas),
+                'perguntas_erradas' => implode(';', $respostas_erradas),
+                'descritores_certos' => implode(';', $descritores_errados),
+                'descritores_errados' => implode(';', $descritores_errados),
+                'recuperacao' => '',
+                'status' => 'Fez a 1º Prova',
+            ];
+            $resultado = ProfessorModel::inserir_gabarito_aluno($insert);
+        }
+
+        return $resultado;
     }
 
 }

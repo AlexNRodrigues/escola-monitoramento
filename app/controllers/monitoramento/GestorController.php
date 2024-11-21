@@ -7,6 +7,8 @@ use app\models\monitoramento\ADModel;
 use app\models\monitoramento\AlunoModel;
 use app\models\monitoramento\GestorModel;
 use app\models\monitoramento\ProfessorModel;
+use app\models\monitoramento\SimuladosModel;
+use Dompdf\Dompdf;
 
 class GestorController
 {
@@ -224,17 +226,17 @@ class GestorController
         $metodo = ($_POST['metodo'] ?? null) === "SELECIONAR" ? null : ($_POST['metodo'] ?? null);
 
 
-    if($periodo != NULL){
+        if($periodo != NULL){
 
-        $periodos = ADModel::GetPeriodos();
-        foreach($periodos as $p){
-            if($p["nome"] == $periodo){
-                $datas = $p;
+            $periodos = ADModel::GetPeriodos();
+            foreach($periodos as $p){
+                if($p["nome"] == $periodo){
+                    $datas = $p;
+                }
             }
+        }else{
+            $datas = NULL;
         }
-    }else{
-        $datas = NULL;
-    }
 
         return [
             "turma" => $turma,
@@ -1030,4 +1032,182 @@ class GestorController
         }
     }
 
+    public static function simulados()
+    {
+        if (!$_SESSION["GESTOR"]) header("location: adm");
+
+        $filtro = [];
+        if(!empty($_GET['query_array']) && is_array($_GET['query_array'])) {
+            foreach ($_GET['query_array'] as $chave => $valor) {
+                $filtro[$chave] = urldecode(trim($valor));
+            }
+        }
+
+        $simulados = SimuladosModel::getSimulados($filtro);
+
+        $disciplinas = GestorModel::GetNomeDisciplinas();
+        $turmas = ProfessorModel::GetTurmas();
+        $professores =  ADModel::GetProfessores();
+
+        MainController::Templates("public/views/gestor/simulados.php", "GESTOR", [
+            'disciplinas'  => $disciplinas,
+            'turmas'       => $turmas,
+            'professores'  => $professores,
+            'simulados'    => $simulados,
+            'filtro'       => $filtro,
+        ]);
+    }
+
+    public static function criar_simulado()
+    {
+        if (!$_SESSION["GESTOR"]) header("location: adm");
+
+        $provasDisponiveis = SimuladosModel::getProvasDisponiveis();
+
+        if($_SERVER["REQUEST_METHOD"] === "POST") {
+            $data = $_POST;
+
+            $ano = date('Y');
+            $mes = date('m');
+            
+            $insert = [
+                'turma_id' => $data['turma'],
+                'nome' => $data['nome'],
+                'area_conhecimento' => $data['area_conhecimento'],
+                'data' => date('Y-m-d', strtotime("$ano-$mes-01")),
+                'orientacoes' => $data['orientacoes'],
+                'gabarito_ids' => $data['id_prova'],
+                'ordem_selecao' => $data['ordem_selecao'],
+            ];
+
+            $simulado = SimuladosModel::addSimulado($insert);
+
+            if($simulado) {
+                $_SESSION["PopUp_Simulado_Sucesso_Adicionado"] = true;
+            } else {
+               $_SESSION["PopUp_Simulado_Erro_Adicionado"] = false;
+            }
+
+            header("location: simulados");
+        }
+
+        MainController::Templates("public/views/gestor/criar_simulado.php", "GESTOR", [
+            'provas'       => $provasDisponiveis,
+            'disciplinas'  => GestorModel::GetNomeDisciplinas(),
+            'turmas'       => ProfessorModel::GetTurmas(),
+            'professores'  => ADModel::GetProfessores(),
+        ]);
+    }
+
+    public static function editar_simulado()
+    {
+        if (!$_SESSION["GESTOR"] && !isset($_GET['query_array']['simulado'])) header("location: adm");
+
+        $simulado_id = $_GET['query_array']['simulado'];
+
+        $simulado = SimuladosModel::getSimulado($simulado_id);
+        $provasSimulado = SimuladosModel::getProvasSimulado($simulado_id);
+        $ids_prova = array_map(fn ($prova) => $prova['gabarito_professor_id'], $provasSimulado);
+
+        if($_SERVER["REQUEST_METHOD"] === "POST") {
+            $dados = $_POST;
+
+            $update = [
+                'id' => $simulado['id'],
+                'turma_id' => $dados['turma'],
+                'nome' => $dados['nome'],
+                'area_conhecimento' => $dados['area_conhecimento'],
+                'orientacoes' => $dados['orientacoes'],
+                'gabarito_ids' => $dados['id_prova'],
+                'ordem_selecao' => $dados['ordem_selecao'],
+            ];
+
+            $simulado = SimuladosModel::updateSimulado($update, $simulado_id);
+
+            if($simulado) {
+                $_SESSION["PopUp_Simulado_Sucesso_Atualizado"] = true;
+            } else {
+                $_SESSION["PopUp_Simulado_Erro_Atualizado"] = false;
+            }
+
+            header("location: simulados");
+            exit;
+        }
+
+        MainController::Templates("public/views/gestor/editar_simulado.php", "GESTOR", [
+            'disciplines'  => GestorModel::GetNomeDisciplinas(),
+            'turmas'       => ProfessorModel::GetTurmas(),
+            'professores'  => ADModel::GetProfessores(),
+            'provas'       => SimuladosModel::getProvas(),
+            'simulado'     => $simulado,
+            'ids_prova'    => $ids_prova,
+        ]);
+    }
+
+    public static function excluir_simulado()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $input = file_get_contents("php://input");
+            $simulado_id = json_decode($input, true)['simulado'];
+
+            $resultado = false;
+
+            if($simulado_id) {
+                $resultado = SimuladosModel::excluirSimulado($simulado_id);
+            }
+
+            echo json_encode(['resultado' => $resultado, 'simulado_id' => $simulado_id]);
+        }
+    }
+
+    public static function download_multi_gabarito() 
+    {
+        if (!$_SESSION["GESTOR"]) header("location: adm");
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'get'  && empty($_GET['query_array']['simulado'])) {
+            header("location: {$_SESSION['PAG_VOLTAR']}");
+        }
+
+        $simulado_id = $_GET['query_array']['simulado'];
+        $simulado = SimuladosModel::getSimulado($simulado_id);
+        $provas = SimuladosModel::getProvasSimulado($simulado_id);
+
+        $turmas = array_unique([...array_column($provas, 'turmas')]);
+
+        ob_start();
+        include "public/views/gestor/download_gabarito.php";
+
+        $html_content = ob_get_contents();
+        ob_end_clean();
+
+        $test = true;
+        $test = false;
+
+        if ($test) {
+            echo $html_content;
+        } else {
+            $options = [
+                'enable_remote' => true,
+                'defaultFont' => 'Arial',
+                'enable_php' => true,
+            ];
+
+            // instantiate and use the dompdf class
+            $dompdf = new Dompdf($options);
+            $dompdf->loadHtml($html_content);
+    
+            // (Optional) Setup the paper size and orientation
+            $dompdf->setPaper('A4', 'portrait');
+    
+            // Render the HTML as PDF
+            $dompdf->render();
+    
+            // Output the generated PDF to Browser
+            $dompdf->stream("gabarito.pdf", [
+                "Attachment" => false
+            ]);
+        }
+
+        exit;
+    }
 }

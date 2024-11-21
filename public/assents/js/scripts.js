@@ -581,19 +581,19 @@ document.querySelectorAll('.professor-selectable-numbers .number-box').forEach(b
     });
 });
 
-document.getElementById('metodo_prova').addEventListener('change', function() {
+document.getElementById('metodo_prova')?.addEventListener('change', function() {
     if (this.checked) {
         document.getElementById('valor-container').style.display = 'block';
     }
 });
 
-document.getElementById('metodo_att').addEventListener('change', function() {
+document.getElementById('metodo_att')?.addEventListener('change', function() {
     if (this.checked) {
         document.getElementById('valor-container').style.display = 'none';
     }
 });
 
-if (document.getElementById('metodo_att').checked) {
+if (document.getElementById('metodo_att') && document.getElementById('metodo_att').checked) {
     document.getElementById('valor-container').style.display = 'none';
 }
 

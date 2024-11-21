@@ -156,6 +156,46 @@ $popups = [
         "title" => "SUCESSO",
         "message" => "PFA excluído com <br> sucesso!",
     ],
+    "PopUp_Prova_not_found" => [
+        "status_class" => "uncheck",
+        "title" => "ERRO",
+        "message" => "Prova não encontrada!",
+    ],
+    "PopUp_Prova_outro_professor" => [
+        "status_class" => "uncheck",
+        "title" => "ERRO",
+        "message" => "A avaliação escolhida está relacionada a outro docente.",
+    ],
+    "PopUp_Gabarito_Prova" => [
+        "status_class" => "check",
+        "title" => "SUCESSO",
+        "message" => "Respostas salva com sucesso!",
+    ],
+    "PopUp_Gabarito_Prova_Erro" => [
+        "status_class" => "uncheck",
+        "title" => "ERRO",
+        "message" => "Erro ao tentar salvar respostas",
+    ],
+    "PopUp_Simulado_Sucesso_Adicionado" => [
+        "status_class" => "check",
+        "title" => "SUCESSO",
+        "message" => "Simulado criado com sucesso",
+    ],
+    "PopUp_Simulado_Erro_Adicionado" => [
+        "status_class" => "uncheck",
+        "title" => "ERRO",
+        "message" => "Erro ao criar o simulado",
+    ],
+    "PopUp_Simulado_Sucesso_Atualizado" => [
+        "status_class" => "check",
+        "title" => "SUCESSO",
+        "message" => "Simulado atualizado com sucesso",
+    ],
+    "PopUp_Simulado_Erro_Atualizado" => [
+        "status_class" => "uncheck",
+        "title" => "ERRO",
+        "message" => "Erro ao atualizar o simulado",
+    ],
 ];
 
 foreach ($popups as $popup_id => $popup_data) {

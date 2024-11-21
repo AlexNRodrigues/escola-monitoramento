@@ -28,7 +28,7 @@
 @import url(professor/security.css);
 @import url(gestor/home.css);
 @import url(pfa/home.css);
-
+@import url(gestor/gabarito.css);
 
 .btn-excluir,.btn-editar{
     border: none;

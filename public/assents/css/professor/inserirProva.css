@@ -1,32 +1,47 @@
 .professor-form-section {
     width: 70%;
     margin: 0 auto;
-  }
+}
 
-  .form-section-header {
+.form-section-header {
     font-size: 1.5em;
     margin-bottom: 10px;
     color: #444;
-  }
+}
 
-  .professor-form-section-wrapper .professor-form-group {
+.professor-form-section-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    & div.form-group-inputs-text {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.professor-form-section-wrapper .professor-form-group {
     display: flex;
     gap: 10px;
     justify-content: center;
     align-items: center;
-  }
-  
-  .professor-form-group {
+}
+
+.professor-form-group {
     margin-bottom: 15px;
-  }
-  
-  .professor-form-group label {
+}
+
+.professor-form-group label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-  }
+}
 
-  .professor-input-text-field {
+.professor-input-text-field {
     width: 70%;
     height: 40px;
     padding: 15px;
@@ -36,83 +51,83 @@
     outline: none;
     font-size: 1em;
     box-sizing: border-box;
-  }
-  
-  .custom-radio-button,
+}
+
+.custom-radio-button,
 .custom-checkbox-button {
-  display: none;
+    display: none;
 }
 
 .custom-radio-button + label,
 .custom-checkbox-button + label {
-  display: inline-block;
-  width: 150px;
-  padding: 10px;
-  margin: 5px;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.3s, border-color 0.3s;
+    display: inline-block;
+    width: 150px;
+    padding: 10px;
+    margin: 5px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .custom-radio-button:checked + label {
-  background-color: #16c1aa;
-  border-color: rgb(0, 169, 138);
-  color: #fff;
+    background-color: #16c1aa;
+    border-color: rgb(0, 169, 138);
+    color: #fff;
 }
 
 .professor-turmas-section {
     margin: 20px 0;
-  }
-  
-  .professor-turmas-section h3 {
+}
+
+.professor-turmas-section h3 {
     margin-bottom: 10px;
-  }
- 
+}
+
 .professor-turmas-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 15px;
-  }
+}
 
-  .custom-checkbox-button:checked + label {
+.custom-checkbox-button:checked + label {
     background-color: #16c1aa;
     border-color: #13a793;
     color: #fff;
-  }
+}
 
-  .professor-disciplinas-section {
+.professor-disciplinas-section {
     margin: 20px 0;
-  }
-   
-  .professor-disciplinas-section {
+}
+
+.professor-disciplinas-section {
     margin: 20px 0;
     text-align: center;
-  }
-  
-  .professor-disciplinas-section h3 {
-    margin-bottom: 10px;
-  }
+}
 
-  .professor-disciplinas-container {
+.professor-disciplinas-section h3 {
+    margin-bottom: 10px;
+}
+
+.professor-disciplinas-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 10px;
     justify-items: center;
-  }
+}
 
-  .input-radio-disciplina-gabarito {
+.input-radio-disciplina-gabarito {
     position: relative;
-  }
-  
-  .input-radio-disciplina-gabarito i {
+}
+
+.input-radio-disciplina-gabarito i {
     position: absolute;
     top: -10px;
     right: -10px;
-  }
+}
 
-  .custom-disciplinas-radio + label {
+.custom-disciplinas-radio + label {
     display: block;
     width: 170px;
     height: 110px;
@@ -126,25 +141,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .custom-disciplinas-radio:checked + label {
+}
+
+.custom-disciplinas-radio:checked + label {
     background-color: #16c1aa;
     border-color: rgb(3, 124, 114);
     color: #fff;
-  }
-  
-  .custom-disciplinas-radio {
-    display: none;
-  } 
+}
 
-  .professor-selectable-numbers {
+.custom-disciplinas-radio {
+    display: none;
+}
+
+.professor-selectable-numbers {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-  }
+}
 
-  .number-box {
+.number-box {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -157,18 +172,18 @@
     font-weight: bold;
     color: #676767;
     transition: 0.4s ease-in-out;
-  }
-  
-  .number-box:hover {
+}
+
+.number-box:hover {
     background-color: #808080;
     border-color: #6b6b6b;
     color: #fff;
-  }
-  
-  .number-box.selected {
+}
+
+.number-box.selected {
     background-color: #16c1aa;
     border-color: #13a591;
     color: #fff;
-  }
+}
 
   

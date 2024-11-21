@@ -58,11 +58,17 @@ $icones = [
 
         <form action="criar_gabarito" method="post">
             <div class="professor-form-section-wrapper">
-                <center>
+                <div class="form-group-inputs-text">
                     <label for="nome-prova" class="professor-form-group-label">Insira o Nome da Prova/atividade:</label><br>
                     <input type="text" maxlength="25" required id="nome-prova" name="nome-prova"
                         class="professor-input-text-field">
-                </center>
+                </div>
+                <br>
+                <div class="form-group-inputs-text">
+                    <label for="area_conhecimento" class="professor-form-group-label">Área de Conhecimento da Prova</label><br>
+                    <input type="text" maxlength="100" id="area_conhecimento" name="area_conhecimento"
+                           class="professor-input-text-field">
+                </div>
             </div>
 
             <div class="professor-form-section-wrapper">

@@ -141,6 +141,11 @@ $popups = [
         "title" => "SUCESSO",
         "message" => "Prova excluída com <br> sucesso!",
     ],
+    "PopUp_Error_excluir_prova_simulado" => [
+        "status_class" => "uncheck",
+        "title" => "ERRO",
+        "message" => "Não é possível excluir a prova por estar relacionada a um simulado.",
+    ],
     "PopUp_inserir_gabarito_professor" => [
         "status_class" => "check",
         "title" => "SUCESSO",

@@ -112,21 +112,21 @@
             </div>
         </div>
 
-        <div id="cam-ctrl" class="controles">
+        <div id="cam-ctrl" class="group-btns controles">
 
-            <button type="button" id="capturar-imagem" class="btn ">
+            <button type="button" id="capturar-imagem" class="btn btn-padrao">
                 Capturar
             </button>
-            <button type="button" id="pause-video" class="btn">
+            <button type="button" id="pause-video" class="btn btn-padrao">
                 Pause
             </button>
-            <button type="button" id="play-video" class="btn d-none">
+            <button type="button" id="play-video" class="btn btn-padrao d-none">
                 Play
             </button>
-            <button type="button" id="trocar-camera" class="btn">
+            <button type="button" id="trocar-camera" class="btn btn-padrao">
                 Trocar
             </button>
-            <button type="button" id="back-to-capture" class="btn close" aria-label="Close">
+            <button type="button" id="back-to-capture" class="btn btn-padrao close" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
 

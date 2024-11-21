@@ -346,12 +346,18 @@ class ProfessorController
 
             if (isset($_POST["enviar-user"])) {
                 if ($_POST["user"] == $_SESSION["numero"]) {
-                    ProfessorModel::ExcluirProvaAluno($id_prova);
-                    ProfessorModel::ExcluirProvaProf($id_prova);
-                    self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} excluiu a prova {$nome_prova}. ");
-                    header("Location: ver_provas");
-                    $_SESSION["PopUp_Excluir_prova"] = true;
-                    exit();
+                    $emSimulado = SimuladosModel::getSimuladoProva($id_prova);
+
+                    if(!$emSimulado) {
+                        ProfessorModel::ExcluirProvaAluno($id_prova);
+                        ProfessorModel::ExcluirProvaProf($id_prova);
+                        self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} excluiu a prova {$nome_prova}. ");
+                        header("Location: ver_provas");
+                        $_SESSION["PopUp_Excluir_prova"] = true;
+                        exit();
+                    } else {
+                        $_SESSION["PopUp_Error_excluir_prova_simulado"] = true;
+                    }
                 } else {
                     echo "<script> window.alert('Nome de usuario Incorreto!') </script>";
                 }

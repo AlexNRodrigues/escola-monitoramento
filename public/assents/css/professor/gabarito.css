@@ -549,14 +549,14 @@ Estilização das relacionadas ao professor lançar as respostas
 }
 
 .container-lancar-prova .controles .btn {
-    background-color: #353a38;
-    transition: 0.5s ease;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 16px;
-    padding: 8px 16px;
-    display: inline-block;
+    /*background-color: #353a38;*/
+    /*transition: 0.5s ease;*/
+    /*border: none;*/
+    /*border-radius: 5px;*/
+    /*color: white;*/
+    /*font-size: 16px;*/
+    /*padding: 8px 16px;*/
+    /*display: inline-block;*/
 }
 
 .container-lancar-prova .controles .btn.d-none {

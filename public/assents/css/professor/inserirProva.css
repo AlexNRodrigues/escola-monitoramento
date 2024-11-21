@@ -26,6 +26,7 @@
 
 .professor-form-section-wrapper .professor-form-group {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
     align-items: center;
@@ -47,7 +48,7 @@
     padding: 15px;
     margin: auto;
     border: 2px solid #ccc;
-    border-radius: 1px;
+    border-radius: 5px;
     outline: none;
     font-size: 1em;
     box-sizing: border-box;
@@ -186,4 +187,40 @@
     color: #fff;
 }
 
-  
+@media (max-width: 440px) {
+    .professor-form-section,
+    .professor-input-text-field {
+        width: 100%;
+    }
+
+    .custom-radio-button + label {
+        width: fit-content;
+    }
+
+    .professor-form-section-wrapper .professor-form-group:not(:has(div.professor-selectable-numbers)) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 8px;
+        column-gap: 10px;
+        align-items: stretch;
+    }
+
+    .professor-turmas-container {
+        grid-template-columns: 1fr 1fr;
+        row-gap: 8px;
+        column-gap: 10px;
+
+        & div {
+            width: auto;
+        }
+    }
+
+    .custom-radio-button + label,
+    .custom-checkbox-button + label {
+        display: block;
+        width: auto !important;
+        font-size: 12px;
+        padding: 6px 8px;
+        margin: 0;
+    }
+}

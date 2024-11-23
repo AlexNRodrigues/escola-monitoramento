@@ -48,7 +48,6 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Data</th>
                             <th>Nome</th>
                             <th>
                                 <select id="disciplina">
@@ -89,9 +88,6 @@
                             <tr>
                                 <td data-label="Selecionar:">
                                     <input type="checkbox" name="id_prova[]" value="<?= $prova['id'] ?>" data-id="">
-                                </td>
-                                <td data-label="Data:">
-                                    <?= date('d/m/Y', strtotime($prova['data_prova'])); ?>
                                 </td>
                                 <td data-label="Nome:">
                                     <?= $prova['nome_prova'] ?>

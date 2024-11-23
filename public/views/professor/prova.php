@@ -1,3 +1,5 @@
+<?php extract($data); ?>
+
 <main class="main-home-professor paia">
     <center>
         <h1 class="titulo-NSL">
@@ -127,5 +129,27 @@
         </div>
     </div>
 
+    <?php if(!$he_simulado): ?>
+        <div class="area-download-gabarito">
+            <hr>
+
+            <h2>Gabarito</h2>
+
+            <form action="download_gabarito" class="download-gabarito" method="post">
+                <div class="form-group">
+                    <label for="orientacoes">Orientações</label>
+                    <div id="quill-container"></div>
+                    <textarea name="orientacoes" id="orientacoes" cols="30" rows="10" required maxlength="600"></textarea>
+                </div>
+
+                <button type="submit" class="botao-form-enviar"  id="download-gabarito">
+                    Download
+                </button>
+            </form>
+        </div>
+    <?php endif; ?>
+
     <br><br><br><br><br><br>
 </main>
+
+<script src="./public/assents/js/quill_config.js"></script>

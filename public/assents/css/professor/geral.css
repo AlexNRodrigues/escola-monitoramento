@@ -205,3 +205,10 @@
     flex-direction: column;
     align-items: center;
 }
+
+@media (max-width: 440px) {
+    .botao-form-editar,
+    .botao-form-enviar-prova {
+        height: 40px;
+    }
+}

@@ -1,82 +1,83 @@
-.area_menu_lateral{
+.area_menu_lateral {
     width: 100%;
     height: 100vh;
     position: fixed;
     margin: 0px;
     display: none;
     background-color: rgba(0, 0, 0, 0);
-    transition: 0.5s ease; 
-  }
+    transition: 0.5s ease;
+    z-index: 2;
+}
 
-  .menu-lateral-main{
-    display: flex; 
+.menu-lateral-main {
+    display: flex;
     top: 0px;
     right: -320px;
     position: fixed;
-    z-index: 1; 
+    z-index: 5;
     transition: 0.8s ease;
-    height: 100%;  
-  } 
+    height: 100%;
+}
 
-  .icone-menu-lateral-fechar { 
+.icone-menu-lateral-fechar {
     background-color: rgb(255, 255, 255);
     height: 35px;
     padding: 10px;
     border-radius: 0px 0px 0px 10px;
-  }
-  
-  .icone-menu-lateral-fechar:hover {  
-    cursor: pointer;
-  }
+}
 
-  .conteudo-menu-lateral{
+.icone-menu-lateral-fechar:hover {
+    cursor: pointer;
+}
+
+.conteudo-menu-lateral {
     background-color: rgb(255, 255, 255);
     width: 270px;
-  }
+}
 
-  .menu-lateral-main-header{
+.menu-lateral-main-header {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 20px;
-  }
-  
-  .menu-lateral-main-header img{
-     width: 30px;
-  }
+}
 
-  .menu-lateral-main-main{
+.menu-lateral-main-header img {
+    width: 30px;
+}
+
+.menu-lateral-main-main {
     height: 65vh;
-    padding: 5px; 
-  }
-  
-  .menu-lateral-main-main h4{
-    margin: 10px 0px;
-  }
+    padding: 5px;
+}
 
-  
-.menu-lateral-main-footer div{
+.menu-lateral-main-main h4 {
+    margin: 10px 0px;
+}
+
+
+.menu-lateral-main-footer div {
     display: flex;
     gap: 5px;
     align-items: center;
     justify-content: center;
-  }
-  
-  .menu-lateral-main-footer {
-    display: flex; 
+}
+
+.menu-lateral-main-footer {
+    display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     gap: 5px;
     margin-bottom: 20px;
-  }
-  
-  .menu-lateral-main-footer a{
+}
+
+.menu-lateral-main-footer a {
     color: black;
     font-weight: bold;
-  }
-  
-  .button-sair-menu{
+}
+
+.button-sair-menu {
     background-color: rgb(167, 45, 45);
     padding: 10px 20px;
     color: white;
@@ -86,75 +87,82 @@
     text-decoration: none;
     font-size: 15px;
     font-weight: bold;
-  }
-  
-  .button-sair-menu:hover{
+}
+
+.button-sair-menu:hover {
     background-color: rgb(124, 30, 30);
     cursor: pointer;
-  }
+}
 
-  .loader {
+.loader {
     width: 120px;
     height: 50px;
     box-sizing: border-box;
-    background:
-      conic-gradient(from 135deg at top,#0000, #000 1deg 90deg,#0000 91deg) right -20px bottom 8px/18px 9px,
-      linear-gradient(#000 0 0) bottom/100% 8px,
-      #fff;
+    background: conic-gradient(from 135deg at top, #0000, #000 1deg 90deg, #0000 91deg) right -20px bottom 8px/18px 9px,
+    linear-gradient(#000 0 0) bottom/100% 8px,
+    #fff;
     background-repeat: no-repeat;
     border-bottom: 8px solid #000;
     position: relative;
     animation: l7-0 2s infinite linear;
-  }
-  .loader::before {
+}
+
+.loader::before {
     content: "";
     position: absolute;
     width: 10px;
     height: 14px;
     background: rgb(5, 192, 55);
     left: 10px;
-    animation: l7-1 2s infinite cubic-bezier(0,200,1,200);
-  }
+    animation: l7-1 2s infinite cubic-bezier(0, 200, 1, 200);
+}
 
-  @keyframes l7-0{
-    100% { background-position: left -20px bottom 8px,bottom}
-  }
-  @keyframes l7-1{
-    0%,50%   {bottom: 8px}
-    90%,100% {bottom: 8.1px}
-  }
-  
+@keyframes l7-0 {
+    100% {
+        background-position: left -20px bottom 8px, bottom
+    }
+}
 
-  .menu-lateral-esquerdo-main{
-    display: flex; 
+@keyframes l7-1 {
+    0%, 50% {
+        bottom: 8px
+    }
+    90%, 100% {
+        bottom: 8.1px
+    }
+}
+
+
+.menu-lateral-esquerdo-main {
+    display: flex;
     top: 0px;
-    z-index: 1;
+    z-index: 5;
     left: -320px;
     position: fixed;
     transition: 0.5s ease;
     height: 100%;
-  } 
+}
 
-  .conteudo-menu-lateral-erquerdo{
+.conteudo-menu-lateral-erquerdo {
     background-color: rgb(77, 77, 77);
     color: white;
     width: 220px;
-  } 
+}
 
-  .menu-lateral-esquerdo-botoes{
+.menu-lateral-esquerdo-botoes {
     display: flex;
     flex-direction: column;
     gap: 10px;
-  }
-  
-  .menu-lateral-esquerdo-botoes hr{
+}
+
+.menu-lateral-esquerdo-botoes hr {
     width: 200px;
     border: 1px solid gray;
     text-align: center;
     margin: 0px;
-  }
+}
 
-  .button-menu-lateral {
+.button-menu-lateral {
     display: block;
     background-color: #09b7ce;
     color: #fff;
@@ -163,36 +171,36 @@
     margin-bottom: 10px;
     text-decoration: none;
     text-align: center;
-  }
-  
-  .button-menu-lateral:hover {
+}
+
+.button-menu-lateral:hover {
     background-color: #0a91a3;
     cursor: pointer;
-  }
+}
 
-  .button-menu-voltar{
+.button-menu-voltar {
     background-color: rgba(221, 221, 221, 0);
     width: 195px;
-    padding: 10px 5px; 
-    text-align: center; 
+    padding: 10px 5px;
+    text-align: center;
     color: white;
     text-decoration: none;
     font-weight: bold;
     transition: 0.5s ease;
-  }
-  
-  .button-menu-voltar:hover{
+}
+
+.button-menu-voltar:hover {
     background-color: rgba(128, 128, 128, 0.348);
     cursor: pointer;
-  }
+}
 
-  .icone-menu-lateral-esquerdo-fechar { 
+.icone-menu-lateral-esquerdo-fechar {
     background-color: rgb(77, 77, 77);
     height: 35px;
     padding: 10px;
     border-radius: 0px 0px 10px 0px;
-  }
-  
-  .icone-menu-lateral-esquerdo-fechar:hover {  
+}
+
+.icone-menu-lateral-esquerdo-fechar:hover {
     cursor: pointer;
-  }
+}

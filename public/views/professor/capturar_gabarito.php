@@ -80,7 +80,7 @@
                 <p><?= $prova['valor'] ?></p>
             </li>
             <li>
-                <h4>Quantidade de questõe:</h4>
+                <h4>Quantidade de questões:</h4>
                 <p><?= $prova['QNT_perguntas'] ?></p>
             </li>
         </ul>

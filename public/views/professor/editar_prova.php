@@ -125,23 +125,8 @@
             <input type="submit" value="Atualizar gabarito" class="botao-form-enviar">
         </form>
 
-        <?php if(!$he_simulado): ?>
-            <form action="download_gabarito" class="download-gabarito" method="post">
-                <div class="form-group">
-                    <label for="orientacoes">Orientações</label>
-                    <div id="quill-container"></div>
-                    <textarea name="orientacoes" id="orientacoes" cols="30" rows="10" required maxlength="600"></textarea>
-                </div>
-
-                <button type="submit" class="botao-form-enviar"  id="download-gabarito">
-                    Gabarito
-                </button>
-            </form>
-        <?php endif; ?>
-
     </div>
 
 </main>
 
-<script src="./public/assents/js/quill_config.js"></script>
 

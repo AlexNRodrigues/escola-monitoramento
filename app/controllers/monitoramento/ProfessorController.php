@@ -268,131 +268,130 @@ class ProfessorController
     }
     public static function prova()
     {
-        if ($_SESSION["PROFESSOR"]) {
-            $provas_professores = AlunoModel::GetProvas();
-            $provas_alunos = AlunoModel::GetProvasFinalizadas();
-            $_SESSION["PAG_VOLTAR"] = "ver_provas";
-
-            if (isset($_POST["id-prova"])) {
-                $id_prova = $_POST["id-prova"];
-                $_SESSION["id_prova_professor"] = $_POST["id-prova"];
-            } else {
-                $id_prova = $_SESSION["id_prova_professor"];
-            }
-
-            $provas = [];
-            $provas_turma = [];
-            $liberado = false;
-
-            foreach ($provas_professores as $prova) {
-                if ($prova["id"] == $id_prova) {
-                    $provaa = $prova;
-                    $turmas = $prova["turmas"];
-                    $nome_prova = $prova["nome_prova"];
-                    $liberado = $prova["liberado"] == "SIM" ? true : false;
-                    if ($prova["liberar_prova"] == null) {
-                        $liberar_prova = true;
-                    } else {
-                        $liberar_prova = false;
-                    }
-                }
-            }
-
-            if ($provas_alunos != null) {
-                foreach ($provas_alunos as $prova) {
-                    if ($prova["id_prova"] == $id_prova) {
-                        $provas[] = $prova;
-                    }
-                }
-            }
-
-            $turma = explode(",", $turmas);
-            $turma = $turma[0];
-
-            if (isset($_POST["status"])) {
-                if ($_POST["status"] == "sim") {
-                    ProfessorModel::alterar_liberado($id_prova, "SIM");
-                    self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} liberou os acesso as respostas da prova {$nome_prova}. ");
-                    header("Location: prova");
-                } else {
-                    self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} bloqueou os acesso as respostas da prova {$nome_prova}. ");
-                    ProfessorModel::alterar_liberado($id_prova, null);
-                    header("Location: prova");
-                }
-            }
-
-            if (isset($_POST["status-liberado"])) {
-                if ($_POST["status-liberado"] == "sim") {
-                    ProfessorModel::alterar_liberado_ver($id_prova, null);
-                    self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} permitiu os alunos fazerem a prova {$nome_prova} ");
-                    header("Location: prova");
-                } else {
-                    ProfessorModel::alterar_liberado_ver($id_prova, "NÃO");
-                    self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} bloqueou os alunos de fazerem a prova {$nome_prova} ");
-                    header("Location: prova");
-                }
-            }
-
-            if (isset($_POST["turma"])) {
-                $turma = $_POST["turma"];
-
-            }
-
-            foreach ($provas as $prova) {
-                if ($prova["turma"] == $turma) {
-                    $provas_turma[] = $prova;
-                }
-            }
-
-            if (isset($_POST["enviar-user"])) {
-                if ($_POST["user"] == $_SESSION["numero"]) {
-                    $emSimulado = SimuladosModel::getSimuladoProva($id_prova);
-
-                    if(!$emSimulado) {
-                        ProfessorModel::ExcluirProvaAluno($id_prova);
-                        ProfessorModel::ExcluirProvaProf($id_prova);
-                        self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} excluiu a prova {$nome_prova}. ");
-                        header("Location: ver_provas");
-                        $_SESSION["PopUp_Excluir_prova"] = true;
-                        exit();
-                    } else {
-                        $_SESSION["PopUp_Error_excluir_prova_simulado"] = true;
-                    }
-                } else {
-                    echo "<script> window.alert('Nome de usuario Incorreto!') </script>";
-                }
-            }
-
-            $dados = [
-                "provas" => $provas,
-                "turmas" => explode(",", $turmas),
-                "turma" => $turma,
-                "provas_turma" => $provas_turma,
-                "liberado" => $liberado,
-                "liberar_prova" => $liberar_prova,
-                "prova" => $provaa,
-                "nome_prova" => $nome_prova,
-            ];
-
-            // $provas_rec = ProfessorModel::GetProvaRecbyIDprova($id_prova);
-            // if (count($provas_rec) > 0) {
-            //     $dados["provas_rec"] = [
-            //         "quantidade" => count($provas_rec),
-            //         "provas" => $provas_rec,
-            //     ];
-            // } else {
-            //     $dados["provas_rec"] = null;
-            // }
-            $dados["provas_rec"] = null;
-
-            // echo "<pre>";
-            // print_r($dados);
-            // echo "</pre>";
-
-            MainController::Templates("public/views/professor/prova.php", "PROFESSOR", $dados);
-        } else {
+        if (!$_SESSION["PROFESSOR"]){
             header("location: adm");
         }
+
+        $provas_professores = AlunoModel::GetProvas();
+        $provas_alunos = AlunoModel::GetProvasFinalizadas();
+        $_SESSION["PAG_VOLTAR"] = "ver_provas";
+
+        if (isset($_POST["id-prova"])) {
+            $id_prova = $_POST["id-prova"];
+            $_SESSION["id_prova_professor"] = $_POST["id-prova"];
+        } else {
+            $id_prova = $_SESSION["id_prova_professor"];
+        }
+
+        $provas = [];
+        $provas_turma = [];
+        $liberado = false;
+
+        foreach ($provas_professores as $prova) {
+            if ($prova["id"] == $id_prova) {
+                $provaa = $prova;
+                $turmas = $prova["turmas"];
+                $nome_prova = $prova["nome_prova"];
+                $liberado = $prova["liberado"] == "SIM" ? true : false;
+                if ($prova["liberar_prova"] == null) {
+                    $liberar_prova = true;
+                } else {
+                    $liberar_prova = false;
+                }
+            }
+        }
+
+        if ($provas_alunos != null) {
+            foreach ($provas_alunos as $prova) {
+                if ($prova["id_prova"] == $id_prova) {
+                    $provas[] = $prova;
+                }
+            }
+        }
+
+        $turma = explode(",", $turmas);
+        $turma = $turma[0];
+
+        if (isset($_POST["status"])) {
+            if ($_POST["status"] == "sim") {
+                ProfessorModel::alterar_liberado($id_prova, "SIM");
+                self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} liberou os acesso as respostas da prova {$nome_prova}. ");
+                header("Location: prova");
+            } else {
+                self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} bloqueou os acesso as respostas da prova {$nome_prova}. ");
+                ProfessorModel::alterar_liberado($id_prova, null);
+                header("Location: prova");
+            }
+        }
+
+        if (isset($_POST["status-liberado"])) {
+            if ($_POST["status-liberado"] == "sim") {
+                ProfessorModel::alterar_liberado_ver($id_prova, null);
+                self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} permitiu os alunos fazerem a prova {$nome_prova} ");
+                header("Location: prova");
+            } else {
+                ProfessorModel::alterar_liberado_ver($id_prova, "NÃO");
+                self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} bloqueou os alunos de fazerem a prova {$nome_prova} ");
+                header("Location: prova");
+            }
+        }
+
+        if (isset($_POST["turma"])) {
+            $turma = $_POST["turma"];
+
+        }
+
+        foreach ($provas as $prova) {
+            if ($prova["turma"] == $turma) {
+                $provas_turma[] = $prova;
+            }
+        }
+
+        if (isset($_POST["enviar-user"])) {
+            if ($_POST["user"] == $_SESSION["numero"]) {
+                $emSimulado = SimuladosModel::getSimuladoProva($id_prova);
+
+                if(!$emSimulado) {
+                    ProfessorModel::ExcluirProvaAluno($id_prova);
+                    ProfessorModel::ExcluirProvaProf($id_prova);
+                    self::inserirLogsProfessor("O professor(a) {$_SESSION["nome_professor"]} excluiu a prova {$nome_prova}. ");
+                    header("Location: ver_provas");
+                    $_SESSION["PopUp_Excluir_prova"] = true;
+                    exit();
+                } else {
+                    $_SESSION["PopUp_Error_excluir_prova_simulado"] = true;
+                }
+            } else {
+                echo "<script> window.alert('Nome de usuario Incorreto!') </script>";
+            }
+        }
+
+        $he_simulado = SimuladosModel::getSimuladoProva($_POST["id-prova"]);
+
+        $dados = [
+            "provas" => $provas,
+            "turmas" => explode(",", $turmas),
+            "turma" => $turma,
+            "provas_turma" => $provas_turma,
+            "liberado" => $liberado,
+            "liberar_prova" => $liberar_prova,
+            "prova" => $provaa,
+            "nome_prova" => $nome_prova,
+            "he_simulado" => $he_simulado,
+        ];
+
+        // $provas_rec = ProfessorModel::GetProvaRecbyIDprova($id_prova);
+        // if (count($provas_rec) > 0) {
+        //     $dados["provas_rec"] = [
+        //         "quantidade" => count($provas_rec),
+        //         "provas" => $provas_rec,
+        //     ];
+        // } else {
+        //     $dados["provas_rec"] = null;
+        // }
+        $dados["provas_rec"] = null;
+
+        MainController::Templates("public/views/professor/prova.php", "PROFESSOR", $dados);
     }
 
     public static function prova_recuperacao()
@@ -1545,8 +1544,9 @@ class ProfessorController
         if (!$_SESSION["PROFESSOR"]) {
             header("location: adm");
         }
-        
-        $idProva = $_SESSION["ID_PROVA_EDITAR"];
+
+        # $idProva = $_SESSION["ID_PROVA_EDITAR"];
+        $idProva = $_SESSION["id_prova_professor"];
 
         if (!$idProva) {
             header('Location: ' . $_SESSION['PAG_VOLTAR']);
@@ -1705,8 +1705,8 @@ class ProfessorController
     private static function salvarRespostasAluno($aluno, $prova, $respostas)
     {
         $id_prova = $prova['gabarito_professor_id'] ?? $prova['id'];
-        $ja_respondido = ProfessorModel::getProvaByRa($id_prova, $aluno['ra'])[0] ?? [];      
-        $gabarito = explode(';', $prova['gabarito']);
+        $ja_respondido = ProfessorModel::getProvaByRa($id_prova, $aluno['ra'])[0] ?? [];
+        $gabarito = array_map('base64_decode', explode(';', $prova['gabarito']));
         $descritores = $prova['descritores'] ? explode(';', $prova['descritores']) : [];
         $respostas_recebida = array_map(function($key, $value) {
             return "{$key},{$value}";
@@ -1732,7 +1732,7 @@ class ProfessorController
                 'pontos_aluno' => round($ponto_questao * $total_acertos),
                 'pontos_aluno_quebrado' => ($ponto_questao * $total_acertos),
                 'perguntas_certas' => implode(';', $respostas_corretas),
-                'perguntas_respostas' => implode(';', $respostas),
+                'perguntas_respostas' => implode(';', $respostas_recebida),
                 'perguntas_erradas' => implode(';', $respostas_erradas),
                 'descritores' => $prova['descritores'],
                 'descritores_certos' => implode(';', $descritores_errados),
@@ -1761,7 +1761,7 @@ class ProfessorController
                 'porcentagem' => $porcetagem_acerto,
                 'pontos_aluno' => round($ponto_questao * $total_acertos),
                 'pontos_aluno_quebrado' => ($ponto_questao * $total_acertos),
-                'perguntas_respostas' => implode(';', $respostas),
+                'perguntas_respostas' => implode(';', $respostas_recebida),
                 'perguntas_certas' => implode(';', $respostas_corretas),
                 'perguntas_erradas' => implode(';', $respostas_erradas),
                 'descritores_certos' => implode(';', $descritores_errados),
@@ -1769,6 +1769,7 @@ class ProfessorController
                 'recuperacao' => '',
                 'status' => 'Fez a 1º Prova',
             ];
+            AlunoModel::Inserir_dados_prova_1_prova($insert);
             $resultado = ProfessorModel::inserir_gabarito_aluno($insert);
         }
 

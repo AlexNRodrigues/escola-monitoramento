@@ -190,6 +190,11 @@
     }
 }
 
+.area-download-gabarito {
+    width: 100%;
+    margin-top: 20px;
+}
+
 form.download-gabarito {
     display: flex;
     flex-direction: column;
@@ -288,11 +293,12 @@ Estilização das relacionadas ao professor lançar as respostas
     max-width: 100%; /* Garante que a lista não ultrapasse a largura do container */
     box-sizing: border-box;
 
-    & li {
-        display: flex;
-        flex-direction: row;
-        gap: 8px;
-    }
+}
+
+.container-lancar-prova .dados-prova li {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
 }
 
 .container-lancar-prova .dados-prova h4,
@@ -317,11 +323,9 @@ Estilização das relacionadas ao professor lançar as respostas
 }
 
 @media (max-width: 600px) {
-    @media (max-width: 600px) {
-        .container-lancar-prova {
-            width: 100%;
-            padding: 0;
-        }
+    .container-lancar-prova {
+        width: 100%;
+        padding: 0;
     }
 
     .container-lancar-prova .dados-prova {
@@ -441,6 +445,11 @@ Estilização das relacionadas ao professor lançar as respostas
     }
 }
 
+@media (max-width: 440px) {
+    .tabela-alunos td {
+        padding-left: 60px;
+    }
+}
 
 /* Estilo da página de acesso a câmera */
 #video-mask {
@@ -451,48 +460,50 @@ Estilização das relacionadas ao professor lançar as respostas
     height: 100%;
     pointer-events: none;
 }
-
 .area-mask {
     position: relative;
     top: 5%;
     width: 90%;
     height: 90%;
     margin: 0 auto;
+}
 
-    & .corner {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-    }
-    & .top-left {
-        top: 0;
-        left: 0;
-        border-top: 2px solid #16C1AA;
-        border-left: 2px solid #16C1AA;
-        border-top-left-radius: 4px;
-    }
-    & .top-right {
-        top: 0;
-        right: 0;
-        border-top: 2px solid #16C1AA;
-        border-right: 2px solid #16C1AA;
-        border-top-right-radius: 4px;
-    }
-    & .bottom-left {
-        bottom: 0;
-        left: 0;
-        border-bottom: 2px solid #16C1AA;
-        border-left: 2px solid #16C1AA;
-        border-bottom-left-radius: 4px;
-    }
-    & .bottom-right {
-        bottom: 0;
-        right: 0;
-        border-bottom: 2px solid #16C1AA;
-        border-right: 2px solid #16C1AA;
-        border-bottom-right-radius: 4px;
-    }
+.area-mask .corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+}
 
+.area-mask .top-left {
+    top: 0;
+    left: 0;
+    border-top: 2px solid #16C1AA;
+    border-left: 2px solid #16C1AA;
+    border-top-left-radius: 4px;
+}
+
+.area-mask .top-right {
+    top: 0;
+    right: 0;
+    border-top: 2px solid #16C1AA;
+    border-right: 2px solid #16C1AA;
+    border-top-right-radius: 4px;
+}
+
+.area-mask .bottom-left {
+    bottom: 0;
+    left: 0;
+    border-bottom: 2px solid #16C1AA;
+    border-left: 2px solid #16C1AA;
+    border-bottom-left-radius: 4px;
+}
+
+.area-mask .bottom-right {
+    bottom: 0;
+    right: 0;
+    border-bottom: 2px solid #16C1AA;
+    border-right: 2px solid #16C1AA;
+    border-bottom-right-radius: 4px;
 }
 
 .container-lancar-prova .spinner-loading {

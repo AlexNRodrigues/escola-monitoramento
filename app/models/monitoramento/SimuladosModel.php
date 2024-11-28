@@ -60,10 +60,11 @@ class SimuladosModel
 
             $prova = [
                 $row['gabarito_professor_id'] => [
-                   'nome_prova'    => $row['nome_prova'],
-                   'disciplina'    => $row['disciplina'],
-                   'QNT_perguntas' => $row['QNT_perguntas'],
-                   'valor'         => $row['valor'],
+                    'id'            => $row['gabarito_professor_id'],
+                    'nome_prova'    => $row['nome_prova'],
+                    'disciplina'    => $row['disciplina'],
+                    'QNT_perguntas' => $row['QNT_perguntas'],
+                    'valor'         => $row['valor'],
                 ]
             ];
 

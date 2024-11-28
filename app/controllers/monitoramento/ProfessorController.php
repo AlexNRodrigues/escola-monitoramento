@@ -366,7 +366,7 @@ class ProfessorController
             }
         }
 
-        $he_simulado = SimuladosModel::getSimuladoProva($_POST["id-prova"]);
+        $he_simulado = SimuladosModel::getSimuladoProva($id_prova);
 
         $dados = [
             "provas" => $provas,

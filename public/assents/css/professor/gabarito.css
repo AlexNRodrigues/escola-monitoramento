@@ -630,9 +630,9 @@ Estilização das relacionadas ao professor lançar as respostas
     }
 }
 
-.container-lancar-prova .area-respostas {
+/* .container-lancar-prova .area-respostas {
     display: none;
-}
+} */
 
 #tabela-respostas-gabarito {
     border-collapse: collapse;

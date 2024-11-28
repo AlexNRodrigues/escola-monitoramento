@@ -92,7 +92,7 @@
         <div class="area-camera">
 
             <div style="position: relative;">
-                <video id="video-input" class="video" autoplay></video>
+            <video id="video-input" class="video" autoplay playsinline></video>
                 <div id="video-mask">
                     <div class="area-mask">
                         <div class="corner top-left"></div>
@@ -145,7 +145,87 @@
 
             <form action="salvar_gabarito" method="post">
                 <table id="tabela-respostas-gabarito">
-                    <tbody id="lista-respostas"></tbody>
+                    <tbody id="lista-respostas">
+
+                        <?php if(!empty($provas_do_simulado)): ?>
+
+                            <?php for($i=0;$i<count($provas_do_simulado);$i++): ?>
+                                <tr class="tr-header">
+                                    <th colspan="6"><?= $provas_do_simulado[$i]['nome_prova']; ?></th>
+                                </tr>
+                                <tr class="tr-header">
+                                    <th>Questão</th>
+                                    <th colspan="5">Alternativas</th>
+                                </tr>
+
+                                <?php for($j=1; $j <= $provas_do_simulado[$i]['QNT_perguntas']; $j++): ?>
+                                    <tr>
+                                        <td>
+                                            <?= $j ?>
+                                        </td>
+                                        <?php foreach(range('A', 'E') as $letra): ?>
+                                            <td>
+                                                <label for="<?= "prova-{$i}-pergunta-{$j}-{$letra}" ?>">
+                                                    <?= $letra ?>
+                                                </label>
+                                                <input type="radio" 
+                                                    name="prova[<?= $i ?>][perguntas_respostas][<?= $j ?>]" 
+                                                    id="<?= "prova-{$i}-pergunta-{$j}-{$letra}" ?>"
+                                                    value="<?= $letra ?>"
+                                                >
+                                            </td>
+                                        <?php endforeach; ?>
+                                    </tr>
+                                <?php endfor ?>
+                            <?php endfor; ?>
+                            
+                        <?php else: ?>
+
+                            <tr class="tr-header">
+                                <th colspan="6"><?= $prova['nome_prova'] ?></th>
+                            </tr>
+                            <tr class="tr-header">
+                                <th>Questão</th>
+                                <th colspan="5">Alternativas</th>
+                            </tr>
+
+                            <?php
+
+                                $respostas = [];
+                                if(!empty($ja_respondido)) {
+                                    $pares = explode(";", $ja_respondido['perguntas_respostas']);
+
+                                    foreach ($pares as $par) {
+                                        list($chave, $valor) = explode(",", $par);
+                                        $respostas[$chave] = $valor;
+                                    }
+                                }
+                            ?>
+
+                            <?php for($i=1; $i <= $prova['QNT_perguntas']; $i++): ?>
+                                <tr>
+                                    <td>
+                                        <?= $i ?>
+                                    </td>
+                                    <?php foreach(range('A', 'E') as $letra): ?>
+                                        <td>
+                                            <label for="<?= "prova-0-pergunta-{$i}-{$letra}" ?>">
+                                                <?= $letra ?>
+                                            </label>
+                                            <input type="radio" 
+                                                name="prova[0][perguntas_respostas][<?= $i ?>]" 
+                                                id="<?= "prova-0-pergunta-{$i}-{$letra}" ?>" 
+                                                value="<?= $letra ?>"
+                                                <?= (isset($respostas[$i]) && $respostas[$i] == $letra) ? 'checked' : '' ?>
+                                            >
+                                        </td>
+                                    <?php endforeach; ?>
+
+                                </tr>
+                            <?php endfor ?>
+                        <?php endif; ?>
+
+                    </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="6">

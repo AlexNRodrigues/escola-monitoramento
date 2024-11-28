@@ -242,12 +242,12 @@ function processarRespostas(respostas) {
     });
 
     // document.querySelector("input#perguntas_respostas").value = todasAsPerguntas;
-    document.querySelector("div.area-respostas").style.display = 'block';
+    // document.querySelector("div.area-respostas").style.display = 'block';
 }
 
 // let respostas = [
 //     // [0, 1, 2, 3, 4, 0, 1, 2, 3, 4],
-//     // [0, 1, 2, 3, 4, 0, 1, 2, 3, 4],
+//     [0, 1, 2, 3, 4, 0, 1, 2, 3, 4],
 //     [1, 1, 2, 2, 3, 3, 4, 4, 0, 0]
 // ];
 // processarRespostas(respostas);

@@ -296,7 +296,7 @@
         qtdColumn: 1,                                    // qtd de colunas
         qtd_materias: <?= count($provas_do_simulado) > 0 ? count($provas_do_simulado) : 1 ?>,   // quantidade de colunas de matérias que tem no gabarito
         qtdX: 6,                                         // qtd de alternativas + identificação do n° questão
-        qtdY: `<?= $prova['QNT_perguntas'] ?>`,                                        // qtd de questões por colunas
+        qtdY: `<?= $prova['QNT_perguntas'] ?>`,          // qtd de questões por colunas
     }
 
     const alternativas = `<?= $gabarito ?>`.split(';');
@@ -310,6 +310,6 @@
 
 
 </script>
-<!--<script src="./public/assents/js/professor/lib/opencv.js"></script>-->
+<!-- <script src="./public/assents/js/professor/lib/opencv.js"></script> -->
 <script src="https://docs.opencv.org/4.x/opencv.js"></script>
-<script src="./public/assents/js/professor/main3.js"></script>
+<script src="./public/assents/js/professor/m_caed.js"></script>

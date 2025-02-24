@@ -173,28 +173,11 @@ $icones = [
                     <h3 class="form-section-header">QUANTIDADE DE QUESTÕES:</h3>
                     <div class="professor-form-group">
                         <div class="professor-selectable-numbers" id="quantidade-perguntas">
-                            <div class="number-box" data-value="1">1</div>
-                            <div class="number-box" data-value="2">2</div>
-                            <div class="number-box" data-value="3">3</div>
-                            <div class="number-box" data-value="4">4</div>
-                            <div class="number-box" data-value="5">5</div>
-                            <div class="number-box" data-value="6">6</div>
-                            <div class="number-box" data-value="7">7</div>
-                            <div class="number-box" data-value="8">8</div>
-                            <div class="number-box" data-value="9">9</div>
-                            <div class="number-box" data-value="10">10</div>
-                            <div class="number-box" data-value="11">11</div>
-                            <div class="number-box" data-value="12">12</div>
-                            <div class="number-box" data-value="13">13</div>
-                            <div class="number-box" data-value="14">14</div>
-                            <div class="number-box" data-value="15">15</div>
-                            <div class="number-box" data-value="16">16</div>
-                            <div class="number-box" data-value="17">17</div>
-                            <div class="number-box" data-value="18">18</div>
-                            <div class="number-box" data-value="19">19</div>
-                            <div class="number-box" data-value="20">20</div>
-                </div>
-                <input name="qtn-perguntas" required type="hidden" class="professor-input-number-field">
+                            <?php for ($i = 1; $i <= 40; $i++): ?>
+                                <div class="number-box" data-value="<?= $i ?>"><?= $i ?></div>
+                            <?php endfor; ?>
+                        </div>
+                        <input name="qtn-perguntas" required type="hidden" class="professor-input-number-field">
                     </div>
                 </center>
                 <center>
@@ -202,26 +185,9 @@ $icones = [
                     <h3 class="form-section-header">VALOR:</h3>
                     <div class="professor-form-group">
                         <div class="professor-selectable-numbers" id="valor">
-                            <div class="number-box" data-value="1">1</div>
-                            <div class="number-box" data-value="2">2</div>
-                            <div class="number-box" data-value="3">3</div>
-                            <div class="number-box" data-value="4">4</div>
-                            <div class="number-box" data-value="5">5</div>
-                            <div class="number-box" data-value="6">6</div>
-                            <div class="number-box" data-value="7">7</div>
-                            <div class="number-box" data-value="8">8</div>
-                            <div class="number-box" data-value="9">9</div>
-                            <div class="number-box" data-value="10">10</div>
-                            <div class="number-box" data-value="11">11</div>
-                            <div class="number-box" data-value="12">12</div>
-                            <div class="number-box" data-value="13">13</div>
-                            <div class="number-box" data-value="14">14</div>
-                            <div class="number-box" data-value="15">15</div>
-                            <div class="number-box" data-value="16">16</div>
-                            <div class="number-box" data-value="17">17</div>
-                            <div class="number-box" data-value="18">18</div>
-                            <div class="number-box" data-value="19">19</div>
-                            <div class="number-box" data-value="20">20</div>
+                            <?php for($i = 1; $i <= 20; $i++): ?>
+                                <div class="number-box" data-value="<?= $i ?>"><?= $i ?></div>
+                            <?php endfor; ?>
                         </div>
                         <input name="valor-prova" required type="hidden" class="professor-input-number-field">
                     </div>
